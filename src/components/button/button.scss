@@ -1,0 +1,16 @@
+.button {
+  padding: 0.75em 1em;
+
+  font-size: 1em;
+  color: darkgreen;
+
+  background: lightgreen;
+  border: 0;
+
+  &:hover,
+  &:focus {
+    color: lightgreen;
+    background: darkgreen;
+  }
+}
+

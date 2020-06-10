@@ -1,7 +1,7 @@
-const webpack = require('webpack')
+import webpack from 'webpack'
 
-const createFractalInstance = require('../lib/create-fractal-instance.js')
-const createWebpackOptions = require('../lib/create-webpack-options.js')
+import createFractalInstance from '../lib/create-fractal-instance.mjs'
+import createWebpackOptions from '../webpack/dev.mjs'
 
 const context = process.cwd()
 
@@ -17,10 +17,13 @@ fractalServer.start().then(() => {
   fractalConsole.success(`Fractal server running at ${fractalServer.url}`)
 })
 
-const webpackOptions = createWebpackOptions({ context })
+const webpackOptions = createWebpackOptions({ context }).toConfig()
 const webpackCompiler = webpack(webpackOptions)
 
-webpackCompiler.watch({}, (error, stats) => {
-  console.log(error)
+webpackCompiler.watch(null, (error, stats) => {
+  if (error) {
+    console.error(error)
+  }
+
   console.log(stats.toString())
 })

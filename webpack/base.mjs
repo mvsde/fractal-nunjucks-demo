@@ -1,22 +1,19 @@
-const Config = require('webpack-chain')
-const CSSExtractPlugin = require('mini-css-extract-plugin')
-const cssnano = require('cssnano')
-const path = require('path')
+import Config from 'webpack-chain'
+import CSSExtractPlugin from 'mini-css-extract-plugin'
+import sass from 'sass'
 
-module.exports = function ({ context }) {
+export default function ({ context }) {
   const config = new Config()
 
   /* eslint-disable indent */
 
   config.context(context)
 
+  config.output.filename('bundle.js')
+
   config.entry('main')
     .add('./src/main.js')
     .add('./src/main.scss')
-
-  config.output
-    .path(path.join(context, 'dev', 'assets'))
-    .filename('bundle.js')
 
   config.module.rule('css')
     .test(/\.(css|scss)$/)
@@ -34,18 +31,6 @@ module.exports = function ({ context }) {
         sourceMap: true
       })
       .end()
-    .use('cssnano-loader')
-      .loader('postcss-loader')
-      .options({
-        sourceMap: true,
-        plugins: [cssnano({
-          preset: ['default', {
-            mergeLonghand: false,
-            mergeRules: false
-          }]
-        })]
-      })
-      .end()
     .use('postcss-loader')
       .loader('postcss-loader')
       .options({
@@ -55,7 +40,7 @@ module.exports = function ({ context }) {
     .use('sass-loader')
       .loader('sass-loader')
       .options({
-        implementation: require('sass')
+        implementation: sass
       })
 
   config
@@ -66,5 +51,5 @@ module.exports = function ({ context }) {
 
   /* eslint-enable indent */
 
-  return config.toConfig()
+  return config
 }

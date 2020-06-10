@@ -1,9 +1,10 @@
 {
   "scripts": {
-    "dev": "node commands/dev.js",
-    "build": "node commands/build.js",
-    "build:dev": "node commands/build-dev.js",
-    "lint:js": "eslint --ignore-path .gitignore \"**/*.js\"",
+    "dev": "node commands/dev.mjs",
+    "build": "node commands/build.mjs",
+    "build:dev": "node commands/build-dev.mjs",
+    "inspect": "node commands/inspect.mjs",
+    "lint:js": "eslint --ignore-path .gitignore \"**/*.m?js\"",
     "lint:css": "stylelint **/*.scss"
   },
   "dependencies": {

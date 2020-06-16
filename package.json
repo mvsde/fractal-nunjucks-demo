@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "node commands/dev.mjs",
     "build": "node commands/build.mjs",
-    "build:dev": "node commands/build-dev.mjs",
+    "static": "node commands/static.mjs",
     "inspect": "node commands/inspect.mjs",
     "lint:js": "eslint --ignore-path .gitignore \"**/*.m?js\"",
     "lint:css": "stylelint **/*.scss"

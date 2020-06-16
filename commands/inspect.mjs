@@ -2,7 +2,7 @@ import util from 'util'
 
 import devConfig from '../webpack/dev.mjs'
 import buildConfig from '../webpack/build.mjs'
-import buildDevConfig from '../webpack/build-dev.mjs'
+import buildDevConfig from '../webpack/static.mjs'
 
 const command = process.argv[2]
 const context = process.cwd()
@@ -16,7 +16,7 @@ switch (command) {
   case 'build':
     config = buildConfig
     break
-  case 'build-dev':
+  case 'static':
     config = buildDevConfig
     break
 }

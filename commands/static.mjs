@@ -1,7 +1,7 @@
 import webpack from 'webpack'
 
 import createFractalInstance from '../lib/create-fractal-instance.mjs'
-import createWebpackOptions from '../webpack/build.mjs'
+import createWebpackOptions from '../webpack/static.mjs'
 
 const context = process.cwd()
 

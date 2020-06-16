@@ -16,7 +16,7 @@
     "@pangolinjs/stylelint-config": "^2.0.1",
     "babel-eslint": "^10.1.0",
     "core-js": "^3.6.5",
-    "css-loader": "^3.5.3",
+    "css-loader": "^3.6.0",
     "cssnano": "^4.1.10",
     "eslint": "^7.2.0",
     "eslint-config-standard": "^14.1.1",

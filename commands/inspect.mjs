@@ -2,30 +2,29 @@ import util from 'util'
 
 import devConfig from '../webpack/dev.mjs'
 import buildConfig from '../webpack/build.mjs'
-import buildDevConfig from '../webpack/static.mjs'
+import docsConfig from '../webpack/docs.mjs'
 
-const command = process.argv[2]
-const context = process.cwd()
+export default function ({ context, command }) {
+  let config
 
-let config
-
-switch (command) {
-  case 'dev':
+  if (command === 'dev') {
     config = devConfig
-    break
-  case 'build':
+  }
+
+  if (command === 'build') {
     config = buildConfig
-    break
-  case 'static':
-    config = buildDevConfig
-    break
+  }
+
+  if (command === 'docs') {
+    config = docsConfig
+  }
+
+  config = config({ context }).toConfig()
+
+  config = util.inspect(config, {
+    colors: true,
+    depth: null
+  })
+
+  console.log(config)
 }
-
-config = config({ context }).toConfig()
-
-config = util.inspect(config, {
-  colors: true,
-  depth: null
-})
-
-console.log(config)

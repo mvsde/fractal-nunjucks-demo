@@ -1,11 +1,10 @@
 {
   "scripts": {
-    "dev": "node commands/dev.mjs",
-    "build": "node commands/build.mjs",
-    "static": "node commands/static.mjs",
-    "inspect": "node commands/inspect.mjs",
     "lint:js": "eslint --ignore-path .gitignore \"**/*.m?js\"",
     "lint:css": "stylelint **/*.scss"
+  },
+  "bin": {
+    "pangolin-core": "bin/pangolin-core.mjs"
   },
   "dependencies": {
     "@babel/preset-env": "^7.10.2",

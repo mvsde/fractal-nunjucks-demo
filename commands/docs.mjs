@@ -1,25 +1,29 @@
 import webpack from 'webpack'
 
 import createFractalInstance from '../lib/create-fractal-instance.mjs'
-import createWebpackOptions from '../webpack/dev.mjs'
+import createWebpackOptions from '../webpack/docs.mjs'
 
 export default function ({ context }) {
   const fractalInstance = createFractalInstance({ context })
   const fractalConsole = fractalInstance.cli.console
-  const fractalServer = fractalInstance.web.server({ sync: true, watch: true })
+  const fractalBuilder = fractalInstance.web.builder()
 
-  fractalServer.on('error', error => {
+  fractalBuilder.on('progress', (completed, total) => {
+    fractalConsole.update(`Exported ${completed} of ${total} items.`, 'info')
+  })
+
+  fractalBuilder.on('error', error => {
     fractalConsole.error(error.message)
   })
 
-  fractalServer.start().then(() => {
-    fractalConsole.success(`Fractal server running at ${fractalServer.url}`)
+  fractalBuilder.build().then(() => {
+    fractalConsole.success('Fractal build completed.')
   })
 
   const webpackOptions = createWebpackOptions({ context }).toConfig()
   const webpackCompiler = webpack(webpackOptions)
 
-  webpackCompiler.watch(null, (error, stats) => {
+  webpackCompiler.run((error, stats) => {
     if (error) {
       console.error(error)
     }

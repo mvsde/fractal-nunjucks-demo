@@ -5,9 +5,22 @@ import base from './base.mjs'
 export default function ({ context }) {
   const config = base({ context })
 
-  config.mode('development')
+  /* eslint-disable indent */
 
-  config.output.path(path.join(context, 'dev', 'assets'))
+  config
+    .mode('development')
+    .devtool('eval-cheap-module-source-map')
+
+  config.output
+    .path(path.join(context, 'public', 'assets'))
+
+  config.module.rule('css')
+    .use('style-loader')
+      .before('css-loader')
+      .loader('style-loader')
+      .end()
+
+  /* eslint-enable indent */
 
   return config
 }

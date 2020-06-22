@@ -4,6 +4,9 @@ import createFractalInstance from '../lib/create-fractal-instance.mjs'
 import createWebpackOptions from '../webpack/docs.mjs'
 
 export default function ({ context }) {
+  process.env.NODE_ENV = 'production'
+  process.env.PANGOLIN_ENV = 'docs'
+
   const fractalInstance = createFractalInstance({ context })
   const fractalConsole = fractalInstance.cli.console
   const fractalBuilder = fractalInstance.web.builder()
@@ -16,10 +19,6 @@ export default function ({ context }) {
     fractalConsole.error(error.message)
   })
 
-  fractalBuilder.build().then(() => {
-    fractalConsole.success('Fractal build completed.')
-  })
-
   const webpackOptions = createWebpackOptions({ context }).toConfig()
   const webpackCompiler = webpack(webpackOptions)
 
@@ -29,5 +28,9 @@ export default function ({ context }) {
     }
 
     console.log(stats.toString())
+
+    fractalBuilder.build().then(() => {
+      fractalConsole.success('Fractal build completed.')
+    })
   })
 }

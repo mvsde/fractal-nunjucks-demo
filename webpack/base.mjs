@@ -1,6 +1,8 @@
 import Config from 'webpack-chain'
-import CSSExtractPlugin from 'mini-css-extract-plugin'
 import sass from 'sass'
+import webpack from 'webpack'
+
+import generateOutputFilename from '../lib/generate-output-filename.mjs'
 
 export default function ({ context }) {
   const config = new Config()
@@ -9,25 +11,32 @@ export default function ({ context }) {
 
   config.context(context)
 
-  config.output.filename('bundle.js')
-
   config.entry('main')
     .add('./src/main.js')
     .add('./src/main.scss')
 
-  config.module.rule('css')
-    .test(/\.(css|scss)$/)
-    .use('css-extract-loader')
-      .loader(CSSExtractPlugin.loader)
-      .options({
-        esModule: true
-      })
+  config.output
+    .filename(generateOutputFilename({ type: 'js' }))
+
+  // JS
+
+  config.module.rule('js')
+    .test(/\.m?js$/)
+    .exclude
+      .add(/node_modules/)
       .end()
+    .use('babel-loader')
+      .loader('babel-loader')
+      .end()
+
+  // CSS
+
+  config.module.rule('css')
+    .test(/\.s?css$/)
     .use('css-loader')
       .loader('css-loader')
       .options({
-        importLoaders: 3,
-        esModule: true,
+        importLoaders: 2,
         sourceMap: true
       })
       .end()
@@ -42,12 +51,15 @@ export default function ({ context }) {
       .options({
         implementation: sass
       })
+      .end()
+
+  // Plugins
 
   config
-    .plugin('css-extract')
-    .use(CSSExtractPlugin, [{
-      filename: 'bundle.css'
-    }])
+    .plugin('env')
+    .use(webpack.EnvironmentPlugin, [
+      'NODE_ENV'
+    ])
 
   /* eslint-enable indent */
 

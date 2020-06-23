@@ -1,5 +1,5 @@
 ---
-title: Fractal Nunjucks Demo
+title: Pangolin.js Next
 ---
 
 Let's have a look at the Fractal design system framework.

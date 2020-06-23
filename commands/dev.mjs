@@ -12,7 +12,6 @@ import getPath from '../lib/get-path.mjs'
  */
 export default function ({ context }) {
   process.env.NODE_ENV = 'development'
-  process.env.PANGOLIN_ENV = 'dev'
 
   const assetsPath = getPath({ context }).assets
 

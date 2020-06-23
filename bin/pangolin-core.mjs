@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
-import dev from '../commands/dev.mjs'
 import build from '../commands/build.mjs'
-import docs from '../commands/docs.mjs'
+import dev from '../commands/dev.mjs'
 import inspect from '../commands/inspect.mjs'
 
 const command = process.argv[2]
@@ -14,10 +13,6 @@ if (command === 'dev') {
 
 if (command === 'build') {
   build({ context })
-}
-
-if (command === 'docs') {
-  docs({ context })
 }
 
 if (command === 'inspect') {

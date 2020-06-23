@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ _target.title }} | {{ _config.project.title }}</title>
 
-    {% if _target.context.process.env.PANGOLIN_ENV === 'dev' %}
-      <script src="{{ '/assets/js/main.js' | path }}" defer></script>
-    {% elif _target.context.process.env.PANGOLIN_ENV === 'docs' %}
+    {% if _target.context._environment === 'production' %}
       <script src="{{ '/assets/js/vendors.js' | path }}" defer></script>
       <script src="{{ '/assets/js/main.js' | path }}" defer></script>
       <link rel="stylesheet" href="{{ '/assets/css/vendor.css' | path }}">
       <link rel="stylesheet" href="{{ '/assets/css/main.css' | path }}">
+    {% else %}
+      <script src="{{ '/assets/js/main.js' | path }}" defer></script>
     {% endif %}
   </head>
   <body>

@@ -1,9 +1,14 @@
 import util from 'util'
 
-import devConfig from '../webpack/dev.mjs'
 import buildConfig from '../webpack/build.mjs'
-import docsConfig from '../webpack/docs.mjs'
+import devConfig from '../webpack/dev.mjs'
 
+/**
+ * Print webpack configuration
+ * @param {Object} options Options
+ * @param {string} options.context Working directory
+ * @param {'dev'|'build'} options.command Command to inspect
+ */
 export default function ({ context, command }) {
   let config
 
@@ -13,10 +18,6 @@ export default function ({ context, command }) {
 
   if (command === 'build') {
     config = buildConfig
-  }
-
-  if (command === 'docs') {
-    config = docsConfig
   }
 
   config = config({ context }).toConfig()

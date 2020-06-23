@@ -2,8 +2,14 @@ import Config from 'webpack-chain'
 import sass from 'sass'
 import webpack from 'webpack'
 
+import getPath from '../lib/get-path.mjs'
 import generateOutputFilename from '../lib/generate-output-filename.mjs'
 
+/**
+ * Base webpack configuration
+ * @param {Object} options Options
+ * @param {string} options.context Working directory
+ */
 export default function ({ context }) {
   const config = new Config()
 
@@ -16,6 +22,7 @@ export default function ({ context }) {
     .add('./src/main.scss')
 
   config.output
+    .path(getPath({ context }).assets)
     .filename(generateOutputFilename({ type: 'js' }))
 
   // JS

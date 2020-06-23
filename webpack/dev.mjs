@@ -1,7 +1,10 @@
-import path from 'path'
-
 import base from './base.mjs'
 
+/**
+ * Development webpack configuration
+ * @param {Object} options Options
+ * @param {string} options.context Working directory
+ */
 export default function ({ context }) {
   const config = base({ context })
 
@@ -10,9 +13,6 @@ export default function ({ context }) {
   config
     .mode('development')
     .devtool('eval-cheap-module-source-map')
-
-  config.output
-    .path(path.join(context, 'public', 'assets'))
 
   config.module.rule('css')
     .use('style-loader')

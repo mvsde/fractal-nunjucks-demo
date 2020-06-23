@@ -1,10 +1,14 @@
 import CSSExtractPlugin from 'mini-css-extract-plugin'
 import cssnano from 'cssnano'
-import path from 'path'
 
 import base from './base.mjs'
 import generateOutputFilename from '../lib/generate-output-filename.mjs'
 
+/**
+ * Production webpack configuration
+ * @param {Object} options Options
+ * @param {string} options.context Working directory
+ */
 export default function ({ context }) {
   const config = base({ context })
 
@@ -13,9 +17,6 @@ export default function ({ context }) {
   config
     .mode('production')
     .devtool('source-map')
-
-  config.output
-    .path(path.join(context, 'dist'))
 
   config.optimization
     .splitChunks({

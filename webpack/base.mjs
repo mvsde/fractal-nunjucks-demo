@@ -2,8 +2,9 @@ import Config from 'webpack-chain'
 import sass from 'sass'
 import webpack from 'webpack'
 
-import getPath from '../lib/get-path.mjs'
+import generateFileLoaderOptions from '../lib/generate-file-loader-options.mjs'
 import generateOutputFilename from '../lib/generate-output-filename.mjs'
+import getPath from '../lib/get-path.mjs'
 
 /**
  * Base webpack configuration
@@ -24,6 +25,7 @@ export default function ({ context }) {
   config.output
     .path(getPath({ context }).assets)
     .filename(generateOutputFilename({ type: 'js' }))
+    .publicPath('/assets/')
 
   // JS
 
@@ -59,6 +61,36 @@ export default function ({ context }) {
         implementation: sass
       })
       .end()
+
+  // Static assets
+
+  config.module
+    .rule('img')
+      .test(/\.(png|jpe?g|webp|svg)(\?.*)?$/)
+      .use('file-loader')
+        .loader('file-loader')
+        .options(generateFileLoaderOptions({ type: 'img' }))
+
+  config.module
+    .rule('video')
+      .test(/\.(mp4|webm)(\?.*)?$/)
+      .use('file-loader')
+        .loader('file-loader')
+        .options(generateFileLoaderOptions({ type: 'video' }))
+
+  config.module
+    .rule('audio')
+      .test(/\.(ogg|mp3|wav|flac|aac)(\?.*)?$/)
+      .use('file-loader')
+        .loader('file-loader')
+        .options(generateFileLoaderOptions({ type: 'audio' }))
+
+  config.module
+    .rule('font')
+      .test(/\.(woff2?)(\?.*)?$/)
+      .use('file-loader')
+        .loader('file-loader')
+        .options(generateFileLoaderOptions({ type: 'font' }))
 
   // Plugins
 

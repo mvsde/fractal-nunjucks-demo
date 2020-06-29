@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import webpack from 'webpack'
 
 import createFractalInstance from '../lib/create-fractal-instance.mjs'
@@ -20,10 +21,26 @@ export default function ({ context }) {
   const fractalInstance = createFractalInstance({ context })
   const fractalConsole = fractalInstance.cli.console
 
-  const fractalServer = fractalInstance.web.server({ sync: true })
+  const fractalServer = fractalInstance.web.server({
+    sync: true,
+    syncOptions: {
+      ghostMode: false,
+      logPrefix: 'Pangolin.js',
+      watchOptions: {
+        // Prevent "double reload": once for the source files and a second time
+        // for the generated assets.
+        ignored: path.resolve(context, assetsPath, '**', '*')
+      }
+    }
+  })
 
   fractalServer.on('error', error => {
     fractalConsole.error(error.message)
+  })
+
+  fractalServer.start().then(() => {
+    console.log(`  Local URL: ${fractalServer.urls.sync.local}`)
+    console.log(`Network URL: ${fractalServer.urls.sync.external}`)
   })
 
   const webpackOptions = createWebpackOptions({ context }).toConfig()
@@ -35,9 +52,5 @@ export default function ({ context }) {
     }
 
     console.log(stats.toString())
-
-    fractalServer.start().then(() => {
-      fractalConsole.success(`Fractal server running at ${fractalServer.url}`)
-    })
   })
 }

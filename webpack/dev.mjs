@@ -14,6 +14,9 @@ export default function ({ context }) {
     .mode('development')
     .devtool('eval-cheap-module-source-map')
 
+  config.output
+    .filename('main.js')
+
   config.module.rule('css')
     .use('style-loader')
       .before('css-loader')

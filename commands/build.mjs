@@ -23,18 +23,6 @@ export default function ({ context }) {
   fs.rmdirSync(buildPath, { recursive: true })
   fs.rmdirSync(staticPath, { recursive: true })
 
-  const fractalInstance = createFractalInstance({ context })
-  const fractalConsole = fractalInstance.cli.console
-  const fractalBuilder = fractalInstance.web.builder()
-
-  fractalBuilder.on('progress', (completed, total) => {
-    fractalConsole.update(`Exported ${completed} of ${total} items.`, 'info')
-  })
-
-  fractalBuilder.on('error', error => {
-    fractalConsole.error(error.message)
-  })
-
   const webpackOptions = createWebpackOptions({ context }).toConfig()
   const webpackCompiler = webpack(webpackOptions)
 
@@ -46,6 +34,22 @@ export default function ({ context }) {
     console.log(stats.toString())
 
     copyDirSync(publicPath, buildPath)
+
+    const fractalInstance = createFractalInstance({
+      context,
+      assetsPath: webpackOptions.output.publicPath
+    })
+
+    const fractalConsole = fractalInstance.cli.console
+    const fractalBuilder = fractalInstance.web.builder()
+
+    fractalBuilder.on('progress', (completed, total) => {
+      fractalConsole.update(`Exported ${completed} of ${total} items.`, 'info')
+    })
+
+    fractalBuilder.on('error', error => {
+      fractalConsole.error(error.message)
+    })
 
     fractalBuilder.build().then(() => {
       fractalConsole.success('Fractal build completed.')

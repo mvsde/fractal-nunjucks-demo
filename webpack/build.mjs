@@ -3,6 +3,7 @@ import cssnano from 'cssnano'
 
 import base from './base.mjs'
 import generateOutputFilename from '../lib/generate-output-filename.mjs'
+import getPath from '../lib/get-path.mjs'
 
 /**
  * Production webpack configuration
@@ -17,6 +18,11 @@ export default function ({ context }) {
   config
     .mode('production')
     .devtool('source-map')
+
+  config.output
+    .path(getPath({ context }).assets)
+    .filename(generateOutputFilename({ type: 'js' }))
+    .publicPath('/assets/')
 
   config.optimization
     .splitChunks({

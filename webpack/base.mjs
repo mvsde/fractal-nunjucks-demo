@@ -3,8 +3,6 @@ import sass from 'sass'
 import webpack from 'webpack'
 
 import generateFileLoaderOptions from '../lib/generate-file-loader-options.mjs'
-import generateOutputFilename from '../lib/generate-output-filename.mjs'
-import getPath from '../lib/get-path.mjs'
 
 /**
  * Base webpack configuration
@@ -21,11 +19,6 @@ export default function ({ context }) {
   config.entry('main')
     .add('./src/main.js')
     .add('./src/main.scss')
-
-  config.output
-    .path(getPath({ context }).assets)
-    .filename(generateOutputFilename({ type: 'js' }))
-    .publicPath('/assets/')
 
   // JS
 

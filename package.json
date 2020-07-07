@@ -1,4 +1,34 @@
 {
+  "name": "@pangolinjs/core",
+  "version": "6.0.0-alpha.0",
+  "description": "Framework for componentized front end development with Nunjucks, Sass, and JavaScript",
+  "license": "Hippocratic-2.1",
+  "author": {
+    "name": "Fynn Becker",
+    "email": "fynn@hey.com"
+  },
+  "homepage": "https://pangolinjs.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pangolinjs/core"
+  },
+  "bugs": {
+    "url": "https://github.com/pangolinjs/core/issues",
+    "email": "fynn@hey.com"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "bin",
+    "commands",
+    "lib",
+    "theme",
+    "webpack"
+  ],
+  "engines": {
+    "node": ">= 14.5.0"
+  },
   "scripts": {
     "lint:js": "eslint --ignore-path .gitignore \"**/*.m?js\"",
     "lint:css": "stylelint **/*.scss"

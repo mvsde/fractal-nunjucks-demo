@@ -30,7 +30,7 @@
     "node": ">= 14.5.0"
   },
   "scripts": {
-    "lint:js": "eslint --ignore-path .gitignore \"**/*.m?js\"",
+    "lint:js": "eslint --ignore-path .gitignore \"**/*.{js,mjs}\"",
     "lint:css": "stylelint **/*.scss"
   },
   "bin": {

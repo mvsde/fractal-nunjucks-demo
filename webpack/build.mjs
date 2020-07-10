@@ -1,3 +1,4 @@
+import BundleAnalyzer from 'webpack-bundle-analyzer'
 import CSSExtractPlugin from 'mini-css-extract-plugin'
 import cssnano from 'cssnano'
 
@@ -59,10 +60,15 @@ export default function ({ context }) {
 
   // Plugins
 
-  config
-    .plugin('css-extract')
+  config.plugin('css-extract')
     .use(CSSExtractPlugin, [{
       filename: generateOutputFilename({ type: 'css' })
+    }])
+
+  config.plugin('bundle-analyzer')
+    .use(BundleAnalyzer.BundleAnalyzerPlugin, [{
+      analyzerMode: 'static',
+      openAnalyzer: false
     }])
 
   /* eslint-enable indent */

@@ -87,8 +87,7 @@ export default function ({ context }) {
 
   // Plugins
 
-  config
-    .plugin('env')
+  config.plugin('env')
     .use(webpack.EnvironmentPlugin, [
       'NODE_ENV'
     ])

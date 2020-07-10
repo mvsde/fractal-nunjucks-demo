@@ -29,6 +29,8 @@ export default async function ({ context }) {
     hot: true,
     contentBase: false,
     sockPort: webpackPort,
+    quiet: true,
+    clientLogLevel: 'error',
     headers: {
       'access-control-allow-origin': '*'
     }

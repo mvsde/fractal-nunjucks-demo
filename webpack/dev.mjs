@@ -1,3 +1,5 @@
+import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin'
+
 import base from './base.mjs'
 
 /**
@@ -22,6 +24,9 @@ export default function ({ context }) {
       .before('css-loader')
       .loader('style-loader')
       .end()
+
+  config.plugin('friendly-errors')
+    .use(FriendlyErrorsPlugin)
 
   /* eslint-enable indent */
 

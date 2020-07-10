@@ -1,6 +1,7 @@
 import Config from 'webpack-chain'
 import sass from 'sass'
 import webpack from 'webpack'
+import WebpackBar from 'webpackbar'
 
 import generateFileLoaderOptions from '../lib/generate-file-loader-options.mjs'
 
@@ -91,6 +92,12 @@ export default function ({ context }) {
     .use(webpack.EnvironmentPlugin, [
       'NODE_ENV'
     ])
+
+  config.plugin('progress')
+    .use(WebpackBar, [{
+      color: '#ff721f',
+      profile: true
+    }])
 
   /* eslint-enable indent */
 

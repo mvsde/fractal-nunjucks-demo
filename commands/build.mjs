@@ -31,7 +31,17 @@ export default function ({ context }) {
       console.error(error)
     }
 
-    console.log(stats.toString())
+    console.log(stats.toString({
+      children: false,
+      chunks: false,
+      colors: true,
+      modules: false
+    }))
+
+    if (stats.hasErrors()) {
+      // Exit with a non-zero status code to allow CI tools to report errors.
+      process.exit(1)
+    }
 
     copyDirSync(publicPath, buildPath)
 
@@ -44,14 +54,19 @@ export default function ({ context }) {
     const fractalBuilder = fractalInstance.web.builder()
 
     fractalBuilder.on('progress', (completed, total) => {
-      fractalConsole.update(`Exported ${completed} of ${total} items.`, 'info')
+      fractalConsole.update(`Fractal: Exported ${completed} of ${total} items.`, 'info')
     })
 
     fractalBuilder.on('error', error => {
       fractalConsole.error(error.message)
     })
 
-    fractalBuilder.build().then(() => {
+    fractalBuilder.build().then(stats => {
+      if (stats.errorCount) {
+        fractalConsole.error('Fractal build failed.')
+        process.exit(1)
+      }
+
       fractalConsole.success('Fractal build completed.')
     })
   })

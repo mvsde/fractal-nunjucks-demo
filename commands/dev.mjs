@@ -17,38 +17,43 @@ export default async function ({ context }) {
 
   const assetsPath = getPath({ context }).assets
 
-  const webpackHost = 'localhost'
-  const webpackPort = await getPort(8080)
+  const host = '0.0.0.0'
+  const fractalPort = await getPort(8080)
+  const webpackPort = await getPort(8081)
 
   fs.rmdirSync(assetsPath, { recursive: true })
 
-  const webpackOptions = createWebpackOptions({ context }).toConfig()
-  webpackOptions.output.publicPath = `http://${webpackHost}:${webpackPort}/`
+  const webpackOptions = createWebpackOptions({
+    context,
+    host,
+    port: webpackPort,
+    uiPort: fractalPort
+  }).toConfig()
+
   const webpackCompiler = webpack(webpackOptions)
   const webpackServer = new WebpackDevServer(webpackCompiler, {
     hot: true,
     contentBase: false,
     sockPort: webpackPort,
-    quiet: true,
+    noInfo: true,
     clientLogLevel: 'error',
     headers: {
       'access-control-allow-origin': '*'
     }
   })
 
-  webpackServer.listen(webpackPort, webpackHost, () => {
+  webpackServer.listen(webpackPort, host, () => {
     const fractalInstance = createFractalInstance({
       context,
       assetsPath: webpackOptions.output.publicPath
     })
 
-    const fractalConsole = fractalInstance.cli.console
-
     const fractalServer = fractalInstance.web.server({
       sync: true,
+      port: fractalPort,
       syncOptions: {
+        ui: false,
         ghostMode: false,
-        logPrefix: 'Pangolin.js',
         watchOptions: {
           // webpack-dev-server already includes reloading, so we ignore
           // everything except Fractal-related files.
@@ -58,12 +63,9 @@ export default async function ({ context }) {
     })
 
     fractalServer.on('error', error => {
-      fractalConsole.error(error.message)
+      fractalInstance.cli.console.error(error.message)
     })
 
-    fractalServer.start().then(() => {
-      console.log(`  Local URL: ${fractalServer.urls.sync.local}`)
-      console.log(`Network URL: ${fractalServer.urls.sync.external}`)
-    })
+    fractalServer.start()
   })
 }

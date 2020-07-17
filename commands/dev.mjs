@@ -28,7 +28,7 @@ export default async function ({ context }) {
     host,
     port: webpackPort,
     uiPort: fractalPort
-  }).toConfig()
+  })
 
   const webpackCompiler = webpack(webpackOptions)
   const webpackServer = new WebpackDevServer(webpackCompiler, {
@@ -42,8 +42,8 @@ export default async function ({ context }) {
     }
   })
 
-  webpackServer.listen(webpackPort, host, () => {
-    const fractalInstance = createFractalInstance({
+  webpackServer.listen(webpackPort, host, async () => {
+    const fractalInstance = await createFractalInstance({
       context,
       assetsPath: webpackOptions.output.publicPath
     })

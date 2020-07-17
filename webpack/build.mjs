@@ -2,30 +2,32 @@ import BundleAnalyzer from 'webpack-bundle-analyzer'
 import CSSExtractPlugin from 'mini-css-extract-plugin'
 import cssnano from 'cssnano'
 
-import base from './base.mjs'
 import generateOutputFilename from '../lib/generate-output-filename.mjs'
+import getConfig from '../lib/get-config.mjs'
 import getPath from '../lib/get-path.mjs'
+import webpackBaseConfig from './base.mjs'
 
 /**
  * Production webpack configuration
  * @param {Object} options Options
  * @param {string} options.context Working directory
  */
-export default function ({ context }) {
-  const config = base({ context })
+export default async function ({ context }) {
+  const config = await getConfig({ context })
+  const webpackConfig = webpackBaseConfig({ context })
 
   /* eslint-disable indent */
 
-  config
+  webpackConfig
     .mode('production')
     .devtool('source-map')
 
-  config.output
+  webpackConfig.output
     .path(getPath({ context }).assets)
     .filename(generateOutputFilename({ type: 'js' }))
-    .publicPath('/assets/')
+    .publicPath(config.base + 'assets/')
 
-  config.optimization
+  webpackConfig.optimization
     .splitChunks({
       cacheGroups: {
         vendors: {
@@ -39,7 +41,7 @@ export default function ({ context }) {
 
   // CSS
 
-  config.module.rule('css')
+  webpackConfig.module.rule('css')
     .use('css-extract-loader')
       .before('css-loader')
       .loader(CSSExtractPlugin.loader)
@@ -60,12 +62,12 @@ export default function ({ context }) {
 
   // Plugins
 
-  config.plugin('css-extract')
+  webpackConfig.plugin('css-extract')
     .use(CSSExtractPlugin, [{
       filename: generateOutputFilename({ type: 'css' })
     }])
 
-  config.plugin('bundle-analyzer')
+  webpackConfig.plugin('bundle-analyzer')
     .use(BundleAnalyzer.BundleAnalyzerPlugin, [{
       analyzerMode: 'static',
       openAnalyzer: false
@@ -73,5 +75,5 @@ export default function ({ context }) {
 
   /* eslint-enable indent */
 
-  return config
+  return webpackConfig.toConfig()
 }

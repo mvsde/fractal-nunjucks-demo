@@ -1,4 +1,8 @@
 {
+  "version": "1.0.0",
+  "author": {
+    "name": "Fynn Becker"
+  },
   "scripts": {
     "dev": "node ../../bin/pangolin-core.mjs dev",
     "build": "node ../../bin/pangolin-core.mjs build",

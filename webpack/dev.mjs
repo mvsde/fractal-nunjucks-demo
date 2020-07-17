@@ -1,8 +1,9 @@
 import { blue, green } from 'kleur/colors'
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin'
 
-import base from './base.mjs'
+import formatIP from '../lib/format-ip.mjs'
 import getHostIPs from '../lib/get-host-ips.mjs'
+import webpackBaseConfig from './base.mjs'
 
 /**
  * Development webpack configuration
@@ -13,36 +14,31 @@ import getHostIPs from '../lib/get-host-ips.mjs'
  * @param {number} options.uiPort Where fractal serves files
  */
 export default function ({ context, host, port, uiPort }) {
-  const config = base({ context })
-
-  const localIP = host === '0.0.0.0' || host === '::'
-    ? 'localhost'
-    : host
-
+  const webpackConfig = webpackBaseConfig({ context })
   const networkIPs = getHostIPs()
 
   /* eslint-disable indent */
 
-  config
+  webpackConfig
     .mode('development')
     .devtool('eval-cheap-module-source-map')
 
-  config.output
+  webpackConfig.output
     .filename('main.js')
     .publicPath(`http://${host}:${port}/`)
 
-  config.module.rule('css')
+  webpackConfig.module.rule('css')
     .use('style-loader')
       .before('css-loader')
       .loader('style-loader')
       .end()
 
-  config.plugin('friendly-errors')
+  webpackConfig.plugin('friendly-errors')
     .use(FriendlyErrorsPlugin, [{
       compilationSuccessInfo: {
         messages: [
           'Pangolin.js dev server running at:',
-          '  - Local:   ' + blue(`http://${localIP}:${uiPort}`),
+          '  - Local:   ' + blue(`http://${formatIP(host)}:${uiPort}`),
           ...networkIPs.map(ip => '  - Network: ' + blue(`http://${ip}:${uiPort}`))
         ],
         notes: [
@@ -54,5 +50,5 @@ export default function ({ context, host, port, uiPort }) {
 
   /* eslint-enable indent */
 
-  return config
+  return webpackConfig.toConfig()
 }

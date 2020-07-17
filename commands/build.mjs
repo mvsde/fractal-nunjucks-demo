@@ -11,7 +11,7 @@ import getPath from '../lib/get-path.mjs'
  * @param {Object} options Options
  * @param {string} options.context Working directory
  */
-export default function ({ context }) {
+export default async function ({ context }) {
   process.env.NODE_ENV = 'production'
 
   const assetsPath = getPath({ context }).assets
@@ -23,10 +23,10 @@ export default function ({ context }) {
   fs.rmdirSync(buildPath, { recursive: true })
   fs.rmdirSync(staticPath, { recursive: true })
 
-  const webpackOptions = createWebpackOptions({ context }).toConfig()
+  const webpackOptions = await createWebpackOptions({ context })
   const webpackCompiler = webpack(webpackOptions)
 
-  webpackCompiler.run((error, stats) => {
+  webpackCompiler.run(async (error, stats) => {
     if (error) {
       console.error(error)
     }
@@ -45,7 +45,7 @@ export default function ({ context }) {
 
     copyDirSync(publicPath, buildPath)
 
-    const fractalInstance = createFractalInstance({
+    const fractalInstance = await createFractalInstance({
       context,
       assetsPath: webpackOptions.output.publicPath
     })

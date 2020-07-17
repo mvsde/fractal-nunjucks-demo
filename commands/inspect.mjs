@@ -1,3 +1,4 @@
+import { green } from 'kleur/colors'
 import util from 'util'
 
 import buildConfig from '../webpack/build.mjs'
@@ -9,18 +10,25 @@ import devConfig from '../webpack/dev.mjs'
  * @param {string} options.context Working directory
  * @param {'dev'|'build'} options.command Command to inspect
  */
-export default function ({ context, command }) {
+export default async function ({ context, command }) {
   let config
 
-  if (command === 'dev') {
-    config = devConfig
+  switch (command) {
+    case 'dev':
+      config = devConfig
+      break
+    case 'build':
+      config = buildConfig
+      break
+    default:
+      console.log(`Please specify one of the following arguments:`)
+      console.log(`  - dev`)
+      console.log(`  - build`)
+      console.log(`\nFor example: ${green('npm run inspect -- dev')}`)
+      return
   }
 
-  if (command === 'build') {
-    config = buildConfig
-  }
-
-  config = config({ context }).toConfig()
+  config = await config({ context })
 
   config = util.inspect(config, {
     colors: true,

@@ -39,8 +39,7 @@ export default function ({ context }) {
     .use('css-loader')
       .loader('css-loader')
       .options({
-        importLoaders: 2,
-        sourceMap: true
+        importLoaders: 2
       })
       .end()
     .use('postcss-loader')
